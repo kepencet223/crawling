@@ -62,10 +62,10 @@ with Preproses:
    sizeTrain = (round(n*0.8))
    data_train = pd.DataFrame(data[:sizeTrain])
    data_test = pd.DataFrame(data[sizeTrain:])
-   st.write("""Dilakukan split data menjadi 80% data training dan 20% data testing""")
-   st.write("""Dilakukan Normalisasi Menggunakan MinMax Scaler""")
+   st.write("""roses pembagian data menjadi 80% data training dan 20% data testing dilakukan untuk keperluan eksperimen dan evaluasi model.""")
+   st.write("""Selanjutnya, dilakukan normalisasi data menggunakan teknik MinMax Scaler. Teknik ini digunakan untuk mengubah nilai-nilai pada dataset menjadi rentang yang lebih kecil antara 0 dan 1.""")
    min_ = st.checkbox('MinMax Scaler')
-   mod = st.button("Cek")
+   mod = st.button("Submit")
    # melakukan normalisasi menggunakan minMaxScaler
    scaler = MinMaxScaler()
    train_scaled = scaler.fit_transform(data_train)
