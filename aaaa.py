@@ -40,6 +40,18 @@ with Data:
    st.subheader('Dataset')
    df = pd.read_csv('NVDA.csv')
    df
+   st.write('Dilakukan Pengecekan data kosong (Missing Value)')
+   st.write(df.isnull().sum())
+   st.write('Masih Terdapat data kosong maka dilakukan penanganan dengan mengisinya dengan nilai median')
+   df['Open'] = df['Open'].fillna(value=df['Open'].median())
+   df['High'] = df['High'].fillna(value=df['High'].median())
+   df['Low'] = df['Low'].fillna(value=df['Low'].median())
+   df['Close'] = df['Close'].fillna(value=df['Close'].median())
+   df['Adj Close'] = df['Adj Close'].fillna(value=df['Adj Close'].median())
+   df['Volume'] = df['Volume'].fillna(value=df['Volume'].median())
+   st.write('Setelah dilakukan penanganan')
+   st.write(df.isnull().sum())
+   st.write('Data yang akan di gunakan adalah data Open')
 with Preproses:
    data = df['Open']
    n = len(data)
