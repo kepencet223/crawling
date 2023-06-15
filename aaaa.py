@@ -1,19 +1,14 @@
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.metrics import mean_absolute_percentage_error
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF, WhiteKernel
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.ensemble import StackingRegressor
-from sklearn.linear_model import Ridge
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.linear_model import LinearRegression
-from sklearn.dummy import DummyRegressor
-from sklearn.preprocessing import StandardScaler
-from sklearn.svm import LinearSVR
-import numpy as np
 import streamlit as st
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from numpy import array
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn import svm
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_absolute_percentage_error
+import altair as alt
+import pickle
 
 # Sidebar controls
 st.sidebar.header("Configuration")
