@@ -101,7 +101,7 @@ with Preproses:
    x = pd.DataFrame(df_X, columns = ['xt-4','xt-3','xt-2','xt-1'])
    y = pd.DataFrame(df_Y, columns = ['xt'])
    dataset_train = pd.concat([x, y], axis=1)
-   dataset_train.to_csv('data-train.csv', index=False)
+   #dataset_train.to_csv('data-train.csv', index=False)
    X_train = dataset_train.iloc[:, :4].values
    Y_train = dataset_train.iloc[:, -1].values
    #memanggil fungsi untuk data testing
@@ -109,7 +109,7 @@ with Preproses:
    x = pd.DataFrame(test_x, columns = ['xt-4','xt-3','xt-2','xt-1'])
    y = pd.DataFrame(test_y, columns = ['xt'])
    dataset_test = pd.concat([x, y], axis=1)
-   dataset_test.to_csv('data-test.csv', index=False)
+   #dataset_test.to_csv('data-test.csv', index=False)
    X_test = dataset_test.iloc[:, :4].values
    Y_test = dataset_test.iloc[:, -1].values
 with Modelling:
