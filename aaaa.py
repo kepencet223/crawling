@@ -65,7 +65,7 @@ with Preproses:
    st.write("""roses pembagian data menjadi 80% data training dan 20% data testing dilakukan untuk keperluan eksperimen dan evaluasi model.""")
    st.write("""Selanjutnya, dilakukan normalisasi data menggunakan teknik MinMax Scaler. Teknik ini digunakan untuk mengubah nilai-nilai pada dataset menjadi rentang yang lebih kecil antara 0 dan 1.""")
    min_ = st.checkbox('MinMax Scaler')
-   mod = st.button("Submit")
+   mod = st.button("Cek")
    # melakukan normalisasi menggunakan minMaxScaler
    scaler = MinMaxScaler()
    train_scaled = scaler.fit_transform(data_train)
