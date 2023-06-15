@@ -1,3 +1,6 @@
-pandas==1.4.0
-scikit-learn==0.24.2
-numpy==1.21.0
+streamlit
+nltk
+numpy
+pandas
+Sastrawi
+scikit-learn
