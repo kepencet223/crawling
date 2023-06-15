@@ -15,27 +15,28 @@ Data,Preproses,Modelling,Implementasi = st.tabs(['Data','Preprosessing Data','Mo
 
 with Data:
    st.title("""
-   Peramalan Data Time Series Pada Saham PT. Adaro Energy Tbk.
+   Peramalan Data Time Series Pada Saham PT Bank Central Asia Tbk.
    """)
    st.write('Proyek Sain Data')
    st.text("""
-            1. Nuskhatul Haqqi 200411100034 
-            2. Amanda Caecilia 200411100090   
+            1. Mohammad Zainal Taufik 200411100167 
+            2. Gio Alpin Jeisa Tarigan 200411100199   
             """)
    st.subheader('Tentang Dataset')
    st.write ("""
-   Dataset yang digunakan adalah data time series pada Saham PT. Adaro Energy Tbk, datanya di dapatkan dari website pada link berikut ini.
+   Data yang kami gunakan adalah data time series pada Saham PT Bank Central Asia Tbk, datanya diambil dari sumber yang tersedia secara publik. Anda dapat mengakses data tersebut melalui tautan berikut ini.
+   https://finance.yahoo.com/quote/BBCA.JK/history?p=BBCA.JK
    """)
    st.write ("""
-    Dataset yang digunakan berjumlah 248 data dan terdapat 7 atribut : 
+    Berikut adalah deskripsi atribut pada dataset yang digunakan, yang terdiri dari 248 data:
     """)
-   st.write('1. Date : berisi tanggal jalannya perdagangan mulai dari tanggal 15 juni 2022- 15 juni 2023')
-   st.write('2. Open : berisi Harga pembukaan pada hari tersebut')
-   st.write('3. High : berisi Harga tertinggi pada hari tersebut')
-   st.write('4. Low : berisi Harga terendah pada hari tersebut')
-   st.write('5. Close : berisi Harga penutup pada hari tersebut')
-   st.write('6. Adj. Close : berisi Harga penutupan yang disesuaikan dengan aksi korporasi seperti right issue, stock split atau stock reverset')
-   st.write('7. Volume : berisi Volume perdagangan (dalam satuan lembar)')
+   st.write('1. Tanggal (Date): Merupakan tanggal perdagangan mulai dari tanggal 15 Juni 2022 hingga 15 Juni 2023.')
+   st.write('2. Harga Pembukaan (Open): Menyimpan harga saham pada saat pembukaan perdagangan pada setiap hari.')
+   st.write('3. Harga Tertinggi (High): Menyimpan harga tertinggi yang dicapai oleh saham pada setiap hari.')
+   st.write('4. Harga Terendah (Low): Menyimpan harga terendah yang dicapai oleh saham pada setiap hari.')
+   st.write('5. Harga Penutupan (Close): Menyimpan harga saham pada saat penutupan perdagangan pada setiap hari.')
+   st.write('6. Harga Penutupan yang Disesuaikan (Adj. Close): Menyimpan harga penutupan saham yang telah disesuaikan dengan aksi korporasi seperti right issue, stock split, atau stock reverse.')
+   st.write('7. Volume Perdagangan (Volume): Menyimpan volume perdagangan saham dalam satuan lembar.')
    st.subheader('Dataset')
    df = pd.read_csv('bca.csv')
    df
@@ -50,7 +51,6 @@ with Data:
    df['Volume'] = df['Volume'].fillna(value=df['Volume'].median())
    st.write('Setelah dilakukan penanganan')
    st.write(df.isnull().sum())
-   st.write('Data yang akan di gunakan adalah data Open')
 
 
 with Preproses:
