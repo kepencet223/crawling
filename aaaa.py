@@ -230,7 +230,7 @@ with tab4:
             # Konversi array menjadi numpy array
             test_array = np.array([test_array])
 
-            file_path = "model_LR_pkl"
+            file_path = "model"
             with open(file_path, "rb") as file:
                 LR= pickle.load(file)
             # Lakukan prediksi dengan model Linear Regression
