@@ -30,7 +30,7 @@ with Data:
    st.write ("""
     Berikut adalah deskripsi atribut pada dataset yang digunakan, yang terdiri dari 248 data: : 
     """)
-   st.write('1. Tanggal (Date): Merupakan tanggal perdagangan mulai dari tanggal 15 Juni 2022 hingga 15 Juni 2023'.)
+   st.write('1. Tanggal (Date): Merupakan tanggal perdagangan mulai dari tanggal 15 Juni 2022 hingga 15 Juni 2023.')
    st.write('2. Harga Pembukaan (Open): Menyimpan harga saham pada saat pembukaan perdagangan pada setiap hari.')
    st.write('3. Harga Tertinggi (High): Menyimpan harga tertinggi yang dicapai oleh saham pada setiap hari.')
    st.write('4. Harga Terendah (Low): Menyimpan harga terendah yang dicapai oleh saham pada setiap hari.')
