@@ -57,12 +57,7 @@ if uploaded_file is not None:
 
     # Create the Gaussian process regressor with the composite kernel
     st.title('Gaussian Process Regressor')
-
-# Load data dan lakukan preprocessing
-# ...
-# X_train_scaled, y_train, X_test_scaled, y_test = ...
-
-# Buat objek Gaussian Process Regressor dan fit ke data training
+    # Buat objek Gaussian Process Regressor dan fit ke data training
     kernel = RBF()
     regressor_gpr = GaussianProcessRegressor(kernel=kernel, random_state=42)
     regressor_gpr.fit(X_train_scaled, y_train)
