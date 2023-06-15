@@ -1,242 +1,237 @@
 import streamlit as st
-
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import StackingClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
-from sklearn import metrics
-from sklearn.naive_bayes import GaussianNB
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import mean_absolute_percentage_error
-from sklearn.metrics import mean_absolute_error
 from numpy import array
-
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn import svm
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_absolute_percentage_error
+import altair as alt
 import pickle
 
-from sklearn import metrics
 
-st.set_page_config(
-    page_title="Project"
-)
-st.title('Finance Prediction')
-st.write('Nurul Faizah (200411100174)')
-st.write('Triasmi Dwi Farawati (200411100174)')
-tab1, tab2, tab3, tab4 = st.tabs(["Dataset", "Prepocessing","Modelling","Implementation"])
+Data,Preproses,Modelling,Implementasi = st.tabs(['Data','Preprosessing Data','Modelling','Implementasi'])
 
-with tab1:
-    st.write('Studi Kasus Finance PT.Adaro Minerals Indonesia')
-    st.write('Perseroan bergerak di bidang usaha pertambangan dan perdagangan batu bara metalurgi melalui Perusahaan Anak dan menjalankan kegiatan usaha berupa jasa konsultasi manajemen. Perseroan merupakan perusahaan yang di bawah naungan AEI. Dalam menjalankan usahanya, Perseroan dan Perusahaan Anaknya didukung dengan bisnis yang terintegrasi dari tambang hingga ke stockpile dan transshipment area. ')
-    
-    df = pd.read_csv("bca.csv")
-    st.write("Dataset Finance PT.Adaro Minerals Indonesia : ")
-    st.write(df)
+with Data:
+   st.title("""
+   Peramalan Data Time Series Pada Saham PT. Adaro Energy Tbk.
+   """)
+   st.write('Proyek Sain Data')
+   st.text("""
+            1. Nuskhatul Haqqi 200411100034 
+            2. Amanda Caecilia 200411100090   
+            """)
+   st.subheader('Tentang Dataset')
+   st.write ("""
+   Dataset yang digunakan adalah data time series pada Saham PT. Adaro Energy Tbk, datanya di dapatkan dari website pada link berikut ini.
+   """)
+   st.write ("""
+    Dataset yang digunakan berjumlah 248 data dan terdapat 7 atribut : 
+    """)
+   st.write('1. Date : berisi tanggal jalannya perdagangan mulai dari tanggal 15 juni 2022- 15 juni 2023')
+   st.write('2. Open : berisi Harga pembukaan pada hari tersebut')
+   st.write('3. High : berisi Harga tertinggi pada hari tersebut')
+   st.write('4. Low : berisi Harga terendah pada hari tersebut')
+   st.write('5. Close : berisi Harga penutup pada hari tersebut')
+   st.write('6. Adj. Close : berisi Harga penutupan yang disesuaikan dengan aksi korporasi seperti right issue, stock split atau stock reverset')
+   st.write('7. Volume : berisi Volume perdagangan (dalam satuan lembar)')
+   st.subheader('Dataset')
+   df = pd.read_csv('bca.csv')
+   df
+   st.write('Dilakukan Pengecekan data kosong (Missing Value)')
+   st.write(df.isnull().sum())
+   st.write('Masih Terdapat data kosong maka dilakukan penanganan dengan mengisinya dengan nilai median')
+   df['Open'] = df['Open'].fillna(value=df['Open'].median())
+   df['High'] = df['High'].fillna(value=df['High'].median())
+   df['Low'] = df['Low'].fillna(value=df['Low'].median())
+   df['Close'] = df['Close'].fillna(value=df['Close'].median())
+   df['Adj Close'] = df['Adj Close'].fillna(value=df['Adj Close'].median())
+   df['Volume'] = df['Volume'].fillna(value=df['Volume'].median())
+   st.write('Setelah dilakukan penanganan')
+   st.write(df.isnull().sum())
+   st.write('Data yang akan di gunakan adalah data Open')
 
-    st.write("Penjelasan Nama - Nama Kolom : ")
-    st.write("""
-    <ol>
-    <li>Date (Tanggal): Tanggal dalam data time series mengacu pada tanggal tertentu saat data keuangan dikumpulkan atau dilaporkan. Ini adalah waktu kapan data keuangan yang terkait dengan PT Adaro Minerals Indonesia dicatat.</li>
-    <li>Open (Harga Pembukaan): Harga pembukaan adalah harga perdagangan PT Adaro Minerals Indonesia pada awal periode waktu tertentu, seperti hari perdagangan atau sesi perdagangan. Harga pembukaan menunjukkan harga perdagangan pertama dari PT Adaro Minerals Indonesia pada periode tersebut.</li>
-    <li>High (Harga Tertinggi): Harga tertinggi adalah harga tertinggi yang dicapai oleh PT Adaro Minerals Indonesia selama periode waktu tertentu, seperti hari perdagangan atau sesi perdagangan. Harga tertinggi mencerminkan harga perdagangan tertinggi yang dicapai oleh PT Adaro Minerals Indonesia dalam periode tersebut.</li>
-    <li>Low (Harga Terendah): Harga terendah adalah harga terendah yang dicapai oleh PT Adaro Minerals Indonesia selama periode waktu tertentu, seperti hari perdagangan atau sesi perdagangan. Harga terendah mencerminkan harga perdagangan terendah yang dicapai oleh PT Adaro Minerals Indonesia dalam periode tersebut.</li>
-    <li>Close (Harga Penutupan): Harga penutupan adalah harga terakhir dari PT Adaro Minerals Indonesia pada akhir periode waktu tertentu, seperti hari perdagangan atau sesi perdagangan. Harga penutupan menunjukkan harga terakhir di mana PT Adaro Minerals Indonesia diperdagangkan pada periode tersebut.</li>
-    <li>Adj Close (Harga Penutupan yang Disesuaikan): Adj Close, atau harga penutupan yang disesuaikan, adalah harga penutupan yang telah disesuaikan untuk faktor-faktor seperti dividen, pemecahan saham, atau perubahan lainnya yang mempengaruhi harga saham PT Adaro Minerals Indonesia. Ini memberikan gambaran yang lebih akurat tentang kinerja saham dari waktu ke waktu karena menghilangkan efek dari perubahan-perubahan tersebut.</li>
-    <li>Volume: Volume dalam konteks data keuangan PT Adaro Minerals Indonesia mengacu pada jumlah saham yang diperdagangkan selama periode waktu tertentu, seperti hari perdagangan atau sesi perdagangan. Volume mencerminkan seberapa aktifnya perdagangan saham PT Adaro Minerals Indonesia dalam periode tersebut.</li>
-    </ol>
-    """,unsafe_allow_html=True)
 
-with tab2:
-    st.write("Data preprocessing adalah proses yang mengubah data mentah ke dalam bentuk yang lebih mudah dipahami. Proses ini penting dilakukan karena data mentah sering kali tidak memiliki format yang teratur. Selain itu, data mining juga tidak dapat memproses data mentah, sehingga proses ini sangat penting dilakukan untuk mempermudah proses berikutnya, yakni analisis data.")
-    st.write("Data preprocessing adalah proses yang penting dilakukan guna mempermudah proses analisis data. Proses ini dapat menyeleksi data dari berbagai sumber dan menyeragamkan formatnya ke dalam satu set data.")
-    
-    scaler = st.radio(
-    "Pilih Metode Normalisasi Data : ",
-    ('Tanpa Scaler', 'MinMax Scaler'))
-    if scaler == 'Tanpa Scaler':
-        st.write("Dataset Tanpa Preprocessing : ")
-        df_new=df
-    elif scaler == 'MinMax Scaler':
-        st.write("Dataset setelah Preprocessing dengan MinMax Scaler: ")
-        file_path = "minmax"
-        with open(file_path, "rb") as file:
-            minmax = pickle.load(file)
-        scaler = minmax
-        df_for_scaler = pd.DataFrame(df, columns = ['High','Low','Close','Adj Close','Volume'])
-        df_for_scaler = scaler.fit_transform(df_for_scaler)
-        df_for_scaler = pd.DataFrame(df_for_scaler,columns = ['High','Low','Close','Adj Close','Volume'])
-        df_drop_column_for_minmaxscaler=df.drop(['High','Low','Close','Adj Close','Volume'], axis=1)
-        df_new = pd.concat([df_for_scaler,df_drop_column_for_minmaxscaler], axis=1)
-    st.write(df_new)
+with Preproses:
+   # untuk mengambil data yang akan diproses
+   data = df['Open']
+   # menghitung jumlah data
+   n = len(data)
+   # membagi data menjadi 80% untuk data training dan 20% data testing
+   sizeTrain = (round(n*0.8))
+   data_train = pd.DataFrame(data[:sizeTrain])
+   data_test = pd.DataFrame(data[sizeTrain:])
+   st.write("""Dilakukan split data menjadi 80% data training dan 20% data testing""")
+   st.write("""Dilakukan Normalisasi Menggunakan MinMax Scaler""")
+   min_ = st.checkbox('MinMax Scaler')
+   mod = st.button("Cek")
+   # melakukan normalisasi menggunakan minMaxScaler
+   scaler = MinMaxScaler()
+   train_scaled = scaler.fit_transform(data_train)
+   # Mengaplikasikan MinMaxScaler pada data pengujian
+   test_scaled = scaler.transform(data_test)
+   # reshaped_data = data.reshape(-1, 1)
+   train = pd.DataFrame(train_scaled, columns = ['data'])
+   train = train['data']
+   test = pd.DataFrame(test_scaled, columns = ['data'])
+   test = test['data']
+   if min_:
+      if mod:
+         st.write("Data Training MinMax Scaler")
+         train
+         st.write("Data Test MinMax Scaler")
+         train
 
-with tab3:
-    st.write("""
-        <h5>Modelling</h5>
-        <br>
-        """, unsafe_allow_html=True)
-    # Menghapus baris terakhir
-    df = df.drop(df.index[-1])
+   def split_sequence(sequence, n_steps):
+      X, y = list(), list()
+      for i in range(len(sequence)):
+         # find the end of this pattern
+         end_ix = i + n_steps
+         # check if we are beyond the sequence
+         if end_ix > len(sequence)-1:
+            break
+         # gather input and output parts of the pattern
+         seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
+         X.append(seq_x)
+         y.append(seq_y)
+      return array(X), array(y)
+   #memanggil fungsi untuk data training
+   df_X, df_Y = split_sequence(train, 4)
+   x = pd.DataFrame(df_X, columns = ['xt-4','xt-3','xt-2','xt-1'])
+   y = pd.DataFrame(df_Y, columns = ['xt'])
+   dataset_train = pd.concat([x, y], axis=1)
+   dataset_train.to_csv('data-train.csv', index=False)
+   X_train = dataset_train.iloc[:, :4].values
+   Y_train = dataset_train.iloc[:, -1].values
+   #memanggil fungsi untuk data testing
+   test_x, test_y = split_sequence(test, 4)
+   x = pd.DataFrame(test_x, columns = ['xt-4','xt-3','xt-2','xt-1'])
+   y = pd.DataFrame(test_y, columns = ['xt'])
+   dataset_test = pd.concat([x, y], axis=1)
+   dataset_test.to_csv('data-test.csv', index=False)
+   X_test = dataset_test.iloc[:, :4].values
+   Y_test = dataset_test.iloc[:, -1].values
+with Modelling:
 
-    def split_sequence(sequence, n_steps):
-        X, y = list(), list()
-        for i in range(len(sequence)):
-            # find the end of this pattern
-            end_ix = i + n_steps
-            # check if we are beyond the sequence
-            if end_ix > len(sequence)-1:
-                break
-            # gather input and output parts of the pattern
-            seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
-            X.append(seq_x)
-            y.append(seq_y)
+   def tuning(X_train,Y_train,X_test,Y_test,iterasi):
+    hasil = 1
+    iter = 0
+    for i in range(1,iterasi):
+        neigh = KNeighborsRegressor(n_neighbors=i)
+        neigh = neigh.fit(X_train,Y_train)
+        y_pred=neigh.predict(X_test)
+        reshaped_data = y_pred.reshape(-1, 1)
+        original_data = scaler.inverse_transform(reshaped_data)
+        reshaped_datates = Y_test.reshape(-1, 1)
+        actual_test = scaler.inverse_transform(reshaped_datates)
+        akhir1 = pd.DataFrame(original_data)
+        akhir = pd.DataFrame(actual_test)
+        mape = mean_absolute_percentage_error(original_data, actual_test)
+        if mape < hasil:
+            hasil = mape
+            iter = i
+    return hasil, iter
+   akr,iter = tuning(X_train,Y_train,X_test,Y_test,30)
+   # Model knn
+   neigh = KNeighborsRegressor(n_neighbors=2)
+   neigh.fit(X_train,Y_train)
+   y_pred=neigh.predict(X_test)
+   reshaped_data = y_pred.reshape(-1, 1)
+   original_data = scaler.inverse_transform(reshaped_data)
+   reshaped_datates = Y_test.reshape(-1, 1)
+   actual_test = scaler.inverse_transform(reshaped_datates)
+   akhir1 = pd.DataFrame(original_data)
+   akhir1.to_csv('prediksi.csv', index=False)
+   akhir = pd.DataFrame(actual_test)
+   akhir.to_csv('aktual.csv', index=False)
+   mape_knn = mean_absolute_percentage_error(original_data, actual_test)
 
-        return array(X), array(y)
-    
-    df_open = df['Open']
+   # Model svm
+   clf_svm = svm.SVR(kernel='rbf')
+   clf_svm.fit(X_train,Y_train)
+   y_pred_SVM=clf_svm.predict(X_test)
+   reshaped_data_SVM = y_pred_SVM.reshape(-1, 1)
+   original_data_ = scaler.inverse_transform(reshaped_data_SVM)
+   reshaped_datates_ = Y_test.reshape(-1, 1)
+   actual_test_ = scaler.inverse_transform(reshaped_datates_)
+   mape_svm = mean_absolute_percentage_error(original_data_, actual_test_)
 
-    n_steps = 3
-    X, y = split_sequence(df_open, n_steps)
+   # Model dtr
+   regressor = DecisionTreeRegressor()
+   regressor.fit(X_train, Y_train)
+   y_pred_dtr=regressor.predict(X_test)
+   reshaped_data = y_pred_dtr.reshape(-1, 1)
+   _original_data = scaler.inverse_transform(reshaped_data)
+   reshaped_datates = Y_test.reshape(-1, 1)
+   _actual_test = scaler.inverse_transform(reshaped_datates)
+   mape_dtr = mean_absolute_percentage_error(_original_data, _actual_test)
 
-    # column names to X and y data frames
-    df_X = pd.DataFrame(X, columns=['t-'+str(i+1) for i in range(n_steps-1, -1,-1)])
-    df_y = pd.DataFrame(y, columns=['t (prediction)'])
+   st.subheader("Ada beberapa pilihan model dibawah ini!")
+   st.write("Pilih Model yang Anda inginkan untuk Cek Mape")
+   kn = st.checkbox('K-Nearest Neighbor')
+   svm_ = st.checkbox('Supper Vector Machine')
+   des = st.checkbox('Decision Tree')
+   mod = st.button("Modeling")
 
-    # concat df_X and df_y
-    df = pd.concat([df_X,df_y], axis=1)
 
-    #Normalisasi data
-    from sklearn.preprocessing import MinMaxScaler
-    scaler= MinMaxScaler()
-    X_norm= scaler.fit_transform(df_X)
-    y_norm= scaler.fit_transform(df_y)
+   if kn :
+      if mod:
+         st.write('Model KNN Menghasilkan Mape: {}'. format(mape_knn))
+   if svm_ :
+      if mod:
+         st.write("Model SVM Menghasilkan Mape : {}" . format(mape_svm))
+   if des :
+      if mod:
+         st.write("Model Decision Tree Menghasilkan Mape : {}" . format(mape_dtr))
+   
+   eval = st.button("Evaluasi semua model")
+   if eval :
+      # st.snow()
+      source = pd.DataFrame({
+            'Nilai Mape' : [mape_knn,mape_svm,mape_dtr],
+            'Nama Model' : ['KNN','SVM','Decision Tree']
+      })
+      bar_chart = alt.Chart(source).mark_bar().encode(
+            y = 'Nilai Mape',
+            x = 'Nama Model'
+      )
+      st.altair_chart(bar_chart,use_container_width=True)
 
-    #split data train 80% test 20%
-    from sklearn.model_selection import train_test_split
-    X_train, X_test, y_train, y_test = train_test_split(X_norm, y_norm, test_size=0.2, random_state=0)
 
-    option = st.selectbox('Pilih Model:', ['Pilih','KNN', 'Decision Tree', 'Random Forest','Linear Regression','SVR'])
-    st.write('Anda memilih:', option)
-    if option == 'KNN':
-        st.write('KNN')
-        # Melakukan fitting dan prediksi menggunakan model KNeighborsRegressor
-        from sklearn.neighbors import KNeighborsRegressor
-        knn_model = KNeighborsRegressor(n_neighbors=6)
-        knn_model.fit(X_train, y_train)
-        knn_preds = knn_model.predict(X_test)
 
-        #KNN
-        mape = mean_absolute_percentage_error(y_test,knn_preds)
-        mae = mean_absolute_error(y_test,knn_preds)
-        akurasi = 1 - (mae / np.mean(y_test))
-        st.write('MAPE :', mape)
-        st.write('MAE :', mae)
-        st.write('Akurasi:', akurasi)
-        
+with Implementasi:
+   #menyimpan model
+   with open('knn','wb') as r:
+      pickle.dump(neigh,r)
+   with open('minmax','wb') as r:
+      pickle.dump(scaler,r)
+   
+   st.title("""Implementasi Data""")
+   input_1 = st.number_input('Masukkan Data 1')
+   input_2 = st.number_input('Masukkan Data 2')
+   input_3 = st.number_input('Masukkan Data 3')
+   input_4 = st.number_input('Masukkan Data 4')
 
-    elif option == 'Decision Tree':
-        st.write('Decision Tree')
-        # Melakukan fitting dan prediksi menggunakan model DecisionTreeRegressor
-        from sklearn.tree import DecisionTreeRegressor
-        dt_model = DecisionTreeRegressor()
-        dt_model.fit(X_train, y_train)
-        dt_preds = dt_model.predict(X_test)
+   def submit():
+      # inputs = np.array([inputan])
+      with open('knn', 'rb') as r:
+         model = pickle.load(r)
+      with open('minmax', 'rb') as r:
+         minmax = pickle.load(r)
+      data1 = minmax.transform([[input_1]])
+      data2 = minmax.transform([[input_2]])
+      data3 = minmax.transform([[input_3]])
+      data4 = minmax.transform([[input_4]])
 
-        #DT
-        mape = mean_absolute_percentage_error(y_test,dt_preds)
-        mae = mean_absolute_error(y_test,dt_preds)
-        akurasi = 1 - (mae / np.mean(y_test))
-        st.write('MAPE :', mape)
-        st.write('MAE :', mae)
-        st.write('Akurasi:', akurasi)
+      X_pred = model.predict([[(data1[0][0]),(data2[0][0]),(data3[0][0]),(data4[0][0])]])
+      t_data1= X_pred.reshape(-1, 1)
+      original = minmax.inverse_transform(t_data1)
+      hasil =f"Prediksi Hasil Peramalan Pada Harga Pembukaan Saham PT. Adaro Energy Tbk. adalah  : {original[0][0]}"
+      st.success(hasil)
 
-    elif option == 'Random Forest':
-        st.write('Random Forest')
-        # Melakukan fitting dan prediksi menggunakan model RandomForestRegressor
-        from sklearn.ensemble import RandomForestRegressor
-        rf_model = RandomForestRegressor()
-        rf_model.fit(X_train, y_train)
-        rf_preds = rf_model.predict(X_test)
+   all = st.button("Submit")
+   if all :
+      st.balloons()
+      submit()
 
-        #RF
-        mape = mean_absolute_percentage_error(y_test,rf_preds)
-        mae = mean_absolute_error(y_test,rf_preds)
-        akurasi = 1 - (mae / np.mean(y_test))
-        st.write('MAPE :', mape)
-        st.write('MAE :', mae)
-        st.write('Akurasi:', akurasi)
-
-    elif option == 'Linear Regression':
-        st.write('Linear Regression')
-        # Melakukan fitting dan prediksi menggunakan model LinearRegression
-        from sklearn.linear_model import LinearRegression
-        lr_model = LinearRegression()
-        lr_model.fit(X_train, y_train)
-        lr_preds = lr_model.predict(X_test)
-
-        #LR
-        mape = mean_absolute_percentage_error(y_test,lr_preds)
-        mae = mean_absolute_error(y_test,lr_preds)
-        akurasi = 1 - (mae / np.mean(y_test))
-        st.write('MAPE :', mape)
-        st.write('MAE :', mae)
-        st.write('Akurasi:', akurasi)
-
-    elif option == 'SVR':
-        st.write('SVR')
-        # Melakukan fitting dan prediksi menggunakan model SVR
-        from sklearn.svm import SVR
-        svr_model = SVR()
-        svr_model.fit(X_train, y_train)
-        svr_preds = svr_model.predict(X_test)
-
-        #SVR
-        mape = mean_absolute_percentage_error(y_test,svr_preds)
-        mae = mean_absolute_error(y_test,svr_preds)
-        akurasi = 1 - (mae / np.mean(y_test))
-        st.write('MAPE :', mape)
-        st.write('MAE :', mae)
-        st.write('Akurasi:', akurasi)
-
-    else:
-        st.write('Pilihan tidak valid')
-            
-
-with tab4:
-    st.write("""
-    <h5>Implementation Model</h5>
-    <br>
-    """, unsafe_allow_html=True)
-    with st.form("my_form"):
-        # Tambahkan inputan
-        input1 = st.number_input('Input 1:')
-        input2 = st.number_input('Input 2:')
-        input3 = st.number_input('Input 3:')
-
-        # Inisialisasi array kosong
-        test_array = []
-
-        # Cek apakah tombol Submit ditekan
-        submitted = st.form_submit_button("Submit")
-
-        # Jika tombol Submit ditekan, buat array dengan inputan
-        if submitted:
-            # Tambahkan nilai input ke dalam array
-            test_array.append(input1)
-            test_array.append(input2)
-            test_array.append(input3)
-
-            # Konversi array menjadi numpy array
-            test_array = np.array([test_array])
-
-            file_path = "model"
-            with open(file_path, "rb") as file:
-                LR= pickle.load(file)
-            # Lakukan prediksi dengan model Linear Regression
-            LR_predict = LR.predict(test_array)
-
-            # Tampilkan hasil
-            st.success(f'Hasil Prediksi: {LR_predict.reshape(1)[0]}')
-
-        
