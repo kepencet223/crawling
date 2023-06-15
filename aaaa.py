@@ -56,11 +56,29 @@ if uploaded_file is not None:
     kernel = 1.0 * RBF(length_scale=1.0) + WhiteKernel(noise_level=1.0)
 
     # Create the Gaussian process regressor with the composite kernel
+    st.title('Gaussian Process Regressor')
+
+# Load data dan lakukan preprocessing
+# ...
+# X_train_scaled, y_train, X_test_scaled, y_test = ...
+
+# Buat objek Gaussian Process Regressor dan fit ke data training
+    kernel = RBF()
     regressor_gpr = GaussianProcessRegressor(kernel=kernel, random_state=42)
     regressor_gpr.fit(X_train_scaled, y_train)
+
+# Lakukan prediksi pada data test
     y_pred_gpr = regressor_gpr.predict(X_test_scaled)
+
+# Hitung MAPE (Mean Absolute Percentage Error)
     mape_gpr = mean_absolute_percentage_error(y_test, y_pred_gpr)
+
+# Tambahkan hasil MAPE ke DataFrame
     mape_df = mape_df.append({'Model': 'Gaussian Process Regressor', 'MAPE': mape_gpr}, ignore_index=True)
+
+# Tampilkan hasil MAPE
+    st.subheader('Hasil MAPE:')
+    st.dataframe(mape_df)
 
     # Create the KNeighborsRegressor model
     regressor_knn = KNeighborsRegressor(n_neighbors=5)
