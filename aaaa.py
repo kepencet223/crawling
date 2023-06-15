@@ -167,12 +167,12 @@ with Modelling:
    _actual_test = scaler.inverse_transform(reshaped_datates)
    mape_dtr = mean_absolute_percentage_error(_original_data, _actual_test)
 
-   st.subheader("Ada beberapa pilihan model dibawah ini!")
-   st.write("Pilih Model yang Anda inginkan untuk Cek Mape")
+   st.subheader("Berikut adalah beberapa pilihan model yang tersedia!")
+   st.write("Silakan pilih model yang ingin Anda gunakan untuk memeriksa MAPE")
    kn = st.checkbox('K-Nearest Neighbor')
    svm_ = st.checkbox('Supper Vector Machine')
    des = st.checkbox('Decision Tree')
-   mod = st.button("Modeling")
+   mod = st.button("Mulai Pemodelan")
 
 
    if kn :
@@ -208,10 +208,10 @@ with Implementasi:
       pickle.dump(scaler,r)
    
    st.title("""Implementasi Data""")
-   input_1 = st.number_input('Masukkan Data 1')
-   input_2 = st.number_input('Masukkan Data 2')
-   input_3 = st.number_input('Masukkan Data 3')
-   input_4 = st.number_input('Masukkan Data 4')
+   input_1 = st.number_input('Nilai Pertama')
+   input_2 = st.number_input('Nilai Kedua')
+   input_3 = st.number_input('Nilai Ketiga')
+   input_4 = st.number_input('Nilai Keempat')
 
    def submit():
       # inputs = np.array([inputan])
@@ -227,7 +227,7 @@ with Implementasi:
       X_pred = model.predict([[(data1[0][0]),(data2[0][0]),(data3[0][0]),(data4[0][0])]])
       t_data1= X_pred.reshape(-1, 1)
       original = minmax.inverse_transform(t_data1)
-      hasil =f"Prediksi Hasil Peramalan Pada Harga Pembukaan Saham PT. Adaro Energy Tbk. adalah  : {original[0][0]}"
+      hasil =f"Prediksi Hasil Peramalan Pada Harga Pembukaan Saham PT Bank Central Asia Tbk. adalah: {original[0][0]}"
       st.success(hasil)
 
    all = st.button("Submit")
