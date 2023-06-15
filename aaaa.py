@@ -49,7 +49,7 @@ with Preproses:
    st.write("""Proses pembagian data menjadi 80% data training dan 20% data testing dilakukan untuk keperluan eksperimen dan evaluasi model.""")
    st.write("""Selanjutnya, dilakukan normalisasi data menggunakan teknik MinMax Scaler. Teknik ini digunakan untuk mengubah nilai-nilai pada dataset menjadi rentang yang lebih kecil antara 0 dan 1.""")
    min_ = st.checkbox('MinMax Scaler')
-   mod = st.button("Cek")
+   mod = st.button("Submit")
    scaler = MinMaxScaler()
    train_scaled = scaler.fit_transform(data_train)
    test_scaled = scaler.transform(data_test)
@@ -148,23 +148,23 @@ with Modelling:
    _actual_test = scaler.inverse_transform(reshaped_datates)
    mape_dtr = mean_absolute_percentage_error(_original_data, _actual_test)
 
-   st.subheader("Ada beberapa pilihan model dibawah ini!")
-   st.write("Pilih Model yang Anda inginkan untuk Cek Mape")
+   st.subheader("Berikut adalah beberapa pilihan model yang tersedia!")
+   st.write("Silakan pilih model yang ingin Anda gunakan untuk memeriksa MAPE")
    kn = st.checkbox('K-Nearest Neighbor')
    svm_ = st.checkbox('Supper Vector Machine')
    des = st.checkbox('Decision Tree')
-   mod = st.button("Modeling")
+   mod = st.button("Mulai Pemodelan")
 
 
    if kn :
       if mod:
-         st.write('Model KNN Menghasilkan Mape: {}'. format(mape_knn))
+         st.write('Hasil MAPE Model KNN: {}'. format(mape_knn))
    if svm_ :
       if mod:
-         st.write("Model SVM Menghasilkan Mape : {}" . format(mape_svm))
+         st.write("Hasil MAPE Model SVM : {}" . format(mape_svm))
    if des :
       if mod:
-         st.write("Model Decision Tree Menghasilkan Mape : {}" . format(mape_dtr))
+         st.write("Hasil MAPE Model Decision Tree : {}" . format(mape_dtr))
    
    eval = st.button("Evaluasi semua model")
    if eval :
@@ -189,10 +189,10 @@ with Implementasi:
       pickle.dump(scaler,r)
    
    st.title("""Implementasi Data""")
-   input_1 = st.number_input('Masukkan Data 1')
-   input_2 = st.number_input('Masukkan Data 2')
-   input_3 = st.number_input('Masukkan Data 3')
-   input_4 = st.number_input('Masukkan Data 4')
+   input_1 = st.number_input('Nilai Pertama')
+input_2 = st.number_input('Nilai Kedua')
+input_3 = st.number_input('Nilai Ketiga')
+input_4 = st.number_input('Nilai Keempat')
 
    def submit():
       # inputs = np.array([inputan])
@@ -208,7 +208,7 @@ with Implementasi:
       X_pred = model.predict([[(data1[0][0]),(data2[0][0]),(data3[0][0]),(data4[0][0])]])
       t_data1= X_pred.reshape(-1, 1)
       original = minmax.inverse_transform(t_data1)
-      hasil =f"Prediksi Hasil Peramalan Pada Harga Pembukaan Saham PT. Adaro Energy Tbk. adalah  : {original[0][0]}"
+      hasil =f"Prediksi Hasil Peramalan Pada Harga Pembukaan Saham PT Bank Central Asia Tbk. adalah: {original[0][0]}"
       st.success(hasil)
 
    all = st.button("Submit")
