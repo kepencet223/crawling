@@ -15,16 +15,17 @@ Data,Preproses,Modelling,Implementasi = st.tabs(['Data','Preprosessing Data','Mo
 
 with Data:
    st.title("""
-   Peramalan Data Time Series Pada Saham PT. Adaro Energy Tbk.
+   Peramalan Data Time Series Pada PT Bank Central Asia Tbk (BBCA.JK)
    """)
    st.write('Proyek Sain Data')
    st.text("""
-            1. Nuskhatul Haqqi 200411100034 
-            2. Amanda Caecilia 200411100090   
+            1. Mohammad Zainal Taufik 200411100034 
+            2. Gio Alpin Jeisa Tarigan 200411100199   
             """)
    st.subheader('Tentang Dataset')
    st.write ("""
-   Dataset yang digunakan adalah data time series pada Saham PT. Adaro Energy Tbk, datanya di dapatkan dari website pada link berikut ini.
+   Dataset yang digunakan adalah data time series pada Saham PT Bank Central Asia Tbk (BBCA.JK), datanya di dapatkan dari website pada link berikut ini.
+   https://finance.yahoo.com/quote/BBCA.JK/history?p=BBCA.JK
    """)
    st.write ("""
     Dataset yang digunakan berjumlah 248 data dan terdapat 7 atribut : 
