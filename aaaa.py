@@ -68,8 +68,8 @@ if uploaded_file is not None:
 # Hitung MAPE (Mean Absolute Percentage Error)
     mape_gpr = mean_absolute_percentage_error(y_test, y_pred_gpr)
 
-# Tambahkan hasil MAPE ke DataFrame
-    mape_df = mape_df.append({'Model': 'Gaussian Process Regressor', 'MAPE': mape_gpr}, ignore_index=True)
+# Tambahkan hasil MAPE ke DataFrame menggunakan metode `loc`
+    mape_df.loc[len(mape_df)] = ['Gaussian Process Regressor', mape_gpr]
 
 # Tampilkan hasil MAPE
     st.subheader('Hasil MAPE:')
