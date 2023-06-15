@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
 from numpy import array
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn import svm
