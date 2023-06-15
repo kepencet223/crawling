@@ -190,9 +190,9 @@ with Implementasi:
    
    st.title("""Implementasi Data""")
    input_1 = st.number_input('Nilai Pertama')
-input_2 = st.number_input('Nilai Kedua')
-input_3 = st.number_input('Nilai Ketiga')
-input_4 = st.number_input('Nilai Keempat')
+   input_2 = st.number_input('Nilai Kedua')
+   input_3 = st.number_input('Nilai Ketiga')
+   input_4 = st.number_input('Nilai Keempat')
 
    def submit():
       # inputs = np.array([inputan])
