@@ -60,7 +60,7 @@ with tab2:
         df_new=df
     elif scaler == 'MinMax Scaler':
         st.write("Dataset setelah Preprocessing dengan MinMax Scaler: ")
-        file_path = "minmax_pkl"
+        file_path = "minmax"
         with open(file_path, "rb") as file:
             minmax = pickle.load(file)
         scaler = minmax
