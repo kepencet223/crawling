@@ -37,7 +37,7 @@ with Data:
    st.write('6. Adj. Close : berisi Harga penutupan yang disesuaikan dengan aksi korporasi seperti right issue, stock split atau stock reverset')
    st.write('7. Volume : berisi Volume perdagangan (dalam satuan lembar)')
    st.subheader('Dataset')
-   df = pd.read_csv('ADRO.JK.csv')
+   df = pd.read_csv('bca.csv')
    df
    st.write('Dilakukan Pengecekan data kosong (Missing Value)')
    st.write(df.isnull().sum())
