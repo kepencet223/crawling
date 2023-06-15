@@ -15,63 +15,44 @@ Data,Preproses,Modelling,Implementasi = st.tabs(['Data','Preprosessing Data','Mo
 
 with Data:
    st.title("""
-   Peramalan Data Time Series Pada Saham PT. Adaro Energy Tbk.
+   Peramalan Data Time Series Pada Saham PT Bank Central Asia Tbk.
    """)
    st.write('Proyek Sain Data')
    st.text("""
-            1. Nuskhatul Haqqi 200411100034 
-            2. Amanda Caecilia 200411100090   
+            1. Mohammad Zainal Taufik 200411100167 
+            2. Gio Alpin Jeisa Tarigan 200411100199   
             """)
    st.subheader('Tentang Dataset')
    st.write ("""
-   Dataset yang digunakan adalah data time series pada Saham PT. Adaro Energy Tbk, datanya di dapatkan dari website pada link berikut ini.
+   Data yang kami gunakan adalah data time series pada Saham PT Bank Central Asia Tbk, datanya diambil dari sumber yang tersedia secara publik. Anda dapat mengakses data tersebut melalui tautan berikut ini.
+   https://finance.yahoo.com/quote/BBCA.JK/history?p=BBCA.JK
    """)
    st.write ("""
-    Dataset yang digunakan berjumlah 248 data dan terdapat 7 atribut : 
+    Berikut adalah deskripsi atribut pada dataset yang digunakan, yang terdiri dari 248 data: : 
     """)
-   st.write('1. Date : berisi tanggal jalannya perdagangan mulai dari tanggal 15 juni 2022- 15 juni 2023')
-   st.write('2. Open : berisi Harga pembukaan pada hari tersebut')
-   st.write('3. High : berisi Harga tertinggi pada hari tersebut')
-   st.write('4. Low : berisi Harga terendah pada hari tersebut')
-   st.write('5. Close : berisi Harga penutup pada hari tersebut')
-   st.write('6. Adj. Close : berisi Harga penutupan yang disesuaikan dengan aksi korporasi seperti right issue, stock split atau stock reverset')
-   st.write('7. Volume : berisi Volume perdagangan (dalam satuan lembar)')
+   st.write('1. Tanggal (Date): Merupakan tanggal perdagangan mulai dari tanggal 15 Juni 2022 hingga 15 Juni 2023.)
+   st.write('2. Harga Pembukaan (Open): Menyimpan harga saham pada saat pembukaan perdagangan pada setiap hari.')
+   st.write('3. Harga Tertinggi (High): Menyimpan harga tertinggi yang dicapai oleh saham pada setiap hari.')
+   st.write('4. Harga Terendah (Low): Menyimpan harga terendah yang dicapai oleh saham pada setiap hari.')
+   st.write('5. Harga Penutupan (Close): Menyimpan harga saham pada saat penutupan perdagangan pada setiap hari.')
+   st.write('6. Harga Penutupan yang Disesuaikan (Adj. Close): Menyimpan harga penutupan saham yang telah disesuaikan dengan aksi korporasi seperti right issue, stock split, atau stock reverse.')
+   st.write('7. Volume Perdagangan (Volume): Menyimpan volume perdagangan saham dalam satuan lembar.')
    st.subheader('Dataset')
    df = pd.read_csv('NVDA.csv')
    df
-   st.write('Dilakukan Pengecekan data kosong (Missing Value)')
-   st.write(df.isnull().sum())
-   st.write('Masih Terdapat data kosong maka dilakukan penanganan dengan mengisinya dengan nilai median')
-   df['Open'] = df['Open'].fillna(value=df['Open'].median())
-   df['High'] = df['High'].fillna(value=df['High'].median())
-   df['Low'] = df['Low'].fillna(value=df['Low'].median())
-   df['Close'] = df['Close'].fillna(value=df['Close'].median())
-   df['Adj Close'] = df['Adj Close'].fillna(value=df['Adj Close'].median())
-   df['Volume'] = df['Volume'].fillna(value=df['Volume'].median())
-   st.write('Setelah dilakukan penanganan')
-   st.write(df.isnull().sum())
-   st.write('Data yang akan di gunakan adalah data Open')
-
-
 with Preproses:
-   # untuk mengambil data yang akan diproses
    data = df['Open']
-   # menghitung jumlah data
    n = len(data)
-   # membagi data menjadi 80% untuk data training dan 20% data testing
    sizeTrain = (round(n*0.8))
    data_train = pd.DataFrame(data[:sizeTrain])
    data_test = pd.DataFrame(data[sizeTrain:])
-   st.write("""Dilakukan split data menjadi 80% data training dan 20% data testing""")
-   st.write("""Dilakukan Normalisasi Menggunakan MinMax Scaler""")
+   st.write("""Proses pembagian data menjadi 80% data training dan 20% data testing dilakukan untuk keperluan eksperimen dan evaluasi model.""")
+   st.write("""Selanjutnya, dilakukan normalisasi data menggunakan teknik MinMax Scaler. Teknik ini digunakan untuk mengubah nilai-nilai pada dataset menjadi rentang yang lebih kecil antara 0 dan 1.""")
    min_ = st.checkbox('MinMax Scaler')
    mod = st.button("Cek")
-   # melakukan normalisasi menggunakan minMaxScaler
    scaler = MinMaxScaler()
    train_scaled = scaler.fit_transform(data_train)
-   # Mengaplikasikan MinMaxScaler pada data pengujian
    test_scaled = scaler.transform(data_test)
-   # reshaped_data = data.reshape(-1, 1)
    train = pd.DataFrame(train_scaled, columns = ['data'])
    train = train['data']
    test = pd.DataFrame(test_scaled, columns = ['data'])
